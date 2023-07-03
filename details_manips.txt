@@ -1,0 +1,385 @@
+/////////////////// Details des differentes manips /////////////////////
+
+
+//// Mise en place manip 18/01/2023 ///////////////
+
+Mise en place de la manip en vue des differentes caractérisations
+Prise en main logiciels, instruments, cameras etc...
+
+Materiel : cam nue, laser accordable, lambdametre, sphère intégrante, colimateur IR ...
+
+Datas dans doc : mise_en_place_manip_tests_divers et Manip_logiciel
+
+
+
+
+
+//// Tests Labview contrôles des differents éléments de la manip - programmation =>  10/02 ////
+
+Tests réponse lambdametre, contrôle LA etc ...
+OK
+
+Datas dans docs : Test_lambdametre et Manip_logiciel
+
+
+
+
+
+
+//// Intégration Power Meter sur l'ensemble semaine du 13/02 ////////
+
+Tests réponse pwr mtr, programmation etc.
+Réponse OK, intégration DATAS pwr mtr dans Fits ok ...
+
+
+Datas dans docs : Tests_pwrmtr
+
+
+
+
+
+
+//// Tests en switchant USB - Hub, synchro et connectivite 16/02 /////
+
+OK tout est comptatible
+
+Datas dans docs : synchro_USB
+
+Petite astuce pour vérifier que tous les élements de la manip sont bien synchro et renvoie bien leurs données respectives au même moment :
+
+	- Effectuer une acquisition classique, typiquement avec le L.A, pour que la caméra tourne en continue et effectue une suite de mesures successives
+	- Masquer la sortie du collimateur qqs secondes afin que le laser ne rentre pas dans la sphère intégrante puis arrêter
+	- Attendre un peu et réffectuer cette opération qqs fois
+	- Apres en visionnant les données la chute de valeur renvoyé par les différents élements de la manip lors de l'obstruation du laser doivent être au même moment
+	- Si elles sont décalées entre elles c'est que les éléments ne sont pas synchro entre eux, vérifier le programme d'acquisition, les diffts threads etc.
+
+
+
+
+
+
+//// Mise en place de la cellule à CH4 avec bombone  du 02/02 au 20/02   ///////
+
+Manip avec la cellule dans la quelle on peut introduire du CH4
+
+Materiel : cam nue, laser accordable, lambdametre, sphère intégrante, colimateur IR, cellule CH4 ...
+
+Objectif : utiliser la cam nue sur des raies d'absorption pour determiner concentration de CH4, determiner une bonne resolution spectrale, ne pas être saturer, prendre en main, coder, beer lambert ...
+
+Manip faire des acquisition sur des games spectrales présentant des raies d'absorption caractérisitiques du CH4 pour les observer
+Faire une acquisition la cellule vide afin d'avoir une reference (Io notamment) 
+Faire une acquisition avec la cellule pleine de CH4 sur la même game spectrale 
+Coder pour recup datas et representer les diffts param (temperature, Io, intensité, lambda etc...)
+
+Games spectrales :
+	long_onde_1642_to_1654 (game spectrale de la cam Nanocarb CH4)
+	long_onde_1665_to_1667 (game spectrale avec des profondes raies caract du CH4 )
+
+
+Datas dans doc : CH4
+	
+
+
+
+
+
+//// Recepétion caméras hyperspectrales 07/02   => Tests acquisition plusieurs tests pour meilleurs game, param etc 03/03/2023 //////
+
+Tests des caméras hyperspectrales acqusition avec le LA selon leur game spectrale
+
+CO2 : 1585 to 1620nm
+Datas dans doc : premiers_tests_cam_hyperspectrales/tests_CO2
+
+CH4 : 1650 à 1654nm et 1665 to 1668nm
+Datas dans doc : premiers_tests_cam_hyperspectrales/tests_CH4
+
+
+
+
+
+
+//// Reprise du code PC AVION ACQUISIION du stage de master    à partir du 21/03/2023 ///////////////
+
+
+Objectif :
+	Recuperer et continuer le code du master
+	Ce code a pour but d'acquerir des données simultanément avec plusieurs caméras nanocarb ImSPOC
+	Le code n'est pas opérationnel
+	La logique a été travaillée et le début, acquisition avec une caméra, est en cours d'écriture
+
+
+	Analyse du code afin de la comprendre
+	Essai d'utilisation (communication avec une caméra) mais compliqué (probleme d'adresse IP)
+	Essai de continuer la programmation, mais compliqué pour moi n'étant pas un softeux ... 
+	Je mets de côté pour effectuer des manips plus urgentes et y reviendrai plus tard si j'ai le temps
+	
+Datas dans doc : PC_Avion_Acquisition
+
+
+
+
+
+
+//// Manip  Omni-λ Monochromators and Spectrographs //////////////
+
+Prise en main
+Installation des logiciels et drivers
+
+Probleme : à utiliser avec source laser super continuum, attendre instalation securtié laser, ça prend bcp de temps ... Attente de l'administration
+
+
+
+
+
+
+//// Manip Zolix  à partir du 27/03	05/04 .... //////////////
+
+Objectif :
+	Prise en main du monochromateur Zolix, Spectro Ocean Optics USB2000+, logiciel SPectraSuite ....
+	
+	Determiner la résolution spectrale des fentes d'entrées et de sortie du Zolix
+
+Manip :
+	Source halogene dans zolix qui monochromat à longueur d'onde precise, retour sur USB 2000+ de Ocean Optics
+	Effectuer une succession de mesure en modifiant la largeur de la fente de sortie puis de la fente d'entree
+	Caracteriser la resolution spectrale des largeurs de fente
+	Programmation : depuis data recup largeur à mi hauteur de la sortie du Zolix, caract son evolution en fonction largeur fente entrée et sortie
+
+
+J'ai rajouté les protocoles pour installer les logiciels et drivers permettant de controler le Zolix et l'USB2000+, ça peut être un peu tricky
+
+
+Datas dans doc : Zolix
+
+
+
+
+
+//// Manip tests cellule CH4 est elle hermetique ? COncentration stable quand fermée ?        Semaine du 17/04 ///////////
+
+Materiel :
+        Cam nue, Cellule à gaz, Laser Accordable, Sphere integrante, Pwr Meter, Lambdametre, Collimateur IR
+   
+
+Manip :  
+    Prendre un mesure de référence avec la cam nue et la cellule vide (sans CH4) sur un game spectrale definie (1665 to 1668 nm)
+    Injecter du CH4 dans la cellule
+    Effectuer des mesures toutes les 45min avec le même montage et sur la même game spectrale que pour la ref 
+    
+    Avec les dates calculer l'absorbance, transmittance de la cellule => concentration de CH4 pour chaque mesure
+    La concentration est elle stable dans le temps ?
+
+
+Datas dans doc : Tests_cellule_ch4
+
+
+
+
+
+////  double_cam_CH4_ref  24/O4 /////////////
+
+
+Materiel :
+       Cam CH4, Cam nue, Cellule à gaz, Laser Accordable, Sphere integrante, Pwr Meter, Lambdametre, Collimateur IR
+   
+Manip :
+	Faire le montage classique L.A / Lambdametre / Collimateur / Cellule à gaz / Sphere integrante / Pwr Mtr
+	Au niveau de la sphère integrante placer en même temps la cameras nue de ref et la cam NanoCarb de ref
+	Faire des acquisitions des deux cameras simultanément avec et sans CH4 dans la cellule
+
+Probleme :
+	L.A déclenche les acquisitions des cams, mais on ne peut le relier qu'à une cam
+	On ne peut donc pas avoir des mesures simultanées sur chaque longueur d'onde
+	Soit on fait des snapshots periodiques avec une cam (typiquement la CH4) pendant que l'autre est target par le L.A
+	Soit on fait des acquisitions avec la source halogene, ce qui serait mieux mais demanderait de faire des snapshots réguliers
+	On va faire les deux methodes
+
+
+
+
+
+
+
+//// Manips Toit IPAG  HORIZON   semaine du 03/05/2023 /////////
+
+
+
+Objectif :
+	Utiliser les deux cam nanocarb CO2 et CH4 en visant à l'horizon
+	On souhaite observer les chaines de montagne dans la fond à l'endroit precis où on en appercois plusieurs à distantes difftes
+	Une chaine en prmeier plan (5km) avec un petit triangle au milieu d'une autre chaine à 10km
+	(le nom des montagnes m'échappe, A REECRIRE ET PRECISER ICI)
+
+Manip :
+	Faire des acquisitions toute la journée du matin au soir avec le déplacement solaire 
+	(typiquement de 10h à 17h pour avoir un parcours solaire ascendant et descandant)
+	
+	Acquérir une image toutes les minutes pendant 7h d'acquisition environ
+	Observer les données récupérées pour déterminer les concentrations en C02 et CH4 en fonction de l'heure, du chemin optique (de la distance à la cam) etc ...
+
+
+Problemes :
+	Il fait très chaud sur le toit, j'ai du proteger les caméras du soleil pour pas qu'elles surchauffent
+	Malgré ça spontanément et plus ou moins au même moment leur température a soudainb grandement augmenté ce qui a conduit à leur arret d'urgence automatique
+	Nous avons des données jusqu'à 15h environ
+	Refaire la manip avec des meilleurs protection ?
+
+
+Datas dans doc : Toit_IPAG/Horizon
+
+
+
+
+
+//// Manips Toit IPAG  SPECTRALON + ZENITH   Pas faite, cam renvoyée à l'ONERA /////////
+
+
+SPECTRALON :
+Protocole : 
+	faire des acquisitions periodiques tout au long d'une journée avec les deux caméras NanoCarb CO2 et CH4 pointées sur une couche de spectralon
+	Spectralon : meteriaux qui reflechit la lumiere incidente de maniere diffuse (typiquement le materiaux interieur d'une sphere intégrante)
+	Cela permettra d'acquérir les rayons incidents du Soleil (de maniere indirect) tout au long de la journée
+
+
+
+ZENITH :
+Protocole:
+	faire des acquisitions periodiques tout au long d'une journée avec les deux caméras NanoCarb CO2 et CH4 pointées vers le ciel, au zenith
+	
+
+
+
+
+
+//////////////////////// Protocole calib cameras hyperspectrales CO2 et CH4   22/05/2023    ////////////////////////
+
+Montage : laser accorable => Y sur lambdametre + collimateur IR => sphere integrante => pwrmetre + camera CH4 / C02
+
+Protocole :
+	1) Faire un cadrillage avec le laser accordable sur une game spectrale précise
+	2) COmparé la réponse spectrale de la caméra à la longueur d'onde donnée par le lambdametre
+
+Game SPectrale
+CO2 : [1606-1612]nm
+CH4 : [1635-1653]nm
+
+
+
+
+
+
+////////////// Cellule à gaz /////////////////////////
+
+
+camera nue ref sans CH4
+
+camera nue plusieurs scans a 1H d'interval avec CH4 sans en rajouter
+
+intercale une mesure nanocarb CH4 au milieu 
+
+
+pour trouver si la pression est stable avec les mesures et concentration
+
+but : a t'on du signal sur la camera nanocarb 
+raies non saturées permet de mesurer concentration
+
+objectif avec detecteur nu c'est de pouvoir retrouver pression et est elle stable ?
+
+
+Etape2 :
+faire la même que avec camera nanocarb CH4
+
+
+
+
+
+
+///// Manip cellule scellée CH4 après la casse de la cellule ouverte précédente 31/05/2023    /////////
+Manip cellule CH4 pré calibrée
+
+Objectif :
+	Déterminer la concentration en CH4 de la cellue
+	Tester nos caméras Nanocarb
+	Tester nos codes
+
+
+Manip 1 : CAMERA NUE
+
+	Materiel : 	Caméra nue, Cellule à gaz précalibrée, Laser Accordable, Sphere integrante, 
+			Pwr Meter, Lambdametre, Collimateur IR
+
+
+Protocole :
+	Faire une acquisition de ref sans la cellule à gaz sur un game spectrale avec le LA
+	Faire une autre acquisition sur meme game spectrale avec la cellule à gaz
+
+	Calculer avec Beer Lambert la concentration etc ...
+
+PROBLEME :
+	Nous n'avons pas de cellule à gaz identique de même taille mais vide
+	Donc la référence n'est aps de qualité car le trajet optique n'est pas le même
+	Pas de trajet à travers de surface de verre comme l'acquisition avec la cellule optique
+
+
+
+Datas dans doc : cellule_gaz_ch4_pré_calib
+
+
+
+
+
+
+	
+////////////// MANIP nouvelle cellule à gaz introduite en CH4     Semaine du 05/06/2023  ////////////////
+
+
+Nouvelle cellule après la casse de la précédente
+Déterminer si notre montage est hermétique, si non comment l'améliorer
+
+
+Materiel :
+        Cam nue, Cellule à gaz, Laser Accordable, Sphere integrante, Pwr Meter, Lambdametre, Collimateur IR
+   
+
+Manip :  
+    Prendre un mesure de référence avec la cam nue et la cellule vide (sans CH4) sur un game spectrale definie (1665 to 1668 nm)
+    Injecter du CH4 dans la cellule
+    Effectuer des mesures toutes les 45min avec le même montage et sur la même game spectrale que pour la ref 
+    
+    Avec les dates calculer l'absorbance, transmittance de la cellule => concentration de CH4 pour chaque mesure
+    La concentration est elle stable dans le temps ?
+
+
+Datas dans doc : cellule_gaz_ch4_bombone
+
+
+
+
+
+
+
+///// Manip source halogène avec caméra CH4   ///////////////////////////////
+
+
+
+Materiel :
+        Cam CH4, Cellule à gaz, Source Halogène, Sphere integrante, Pwr Meter, Lambdametre, Collimateur IR
+
+
+Manip :  
+	Faire le montage basique mais remplacer le L.A par la source halogene, placée donc devant la cellule à gaz elle même devant la sphère intégrante
+	Prendre un mesure de référence avec la cam CH4 et la cellule vide (sans CH4)
+	Injecter du CH4 dans la cellule
+	Effectuer un snapshot toutes les x min 
+	Typiquement pour une meilleure précision faire une moyenne de beaucoup d'image etant donné que le temps n'est pas un souci pour cette experience
+	J'ai moyenné sur 200 images
+
+	Analyses des datas : observer l'évolution de la quantite de CH4 au cours du temps
+
+
+
+
+
+
+
+

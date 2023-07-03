@@ -1,0 +1,9 @@
+Ce script python permet d'acquérir des images depuis une caméra IP et de les stocker en continu sur un ordinateur distant via un module de stockage. Le script est composé d'une classe nommée Acquisition qui contient des méthodes pour initier une acquisition d'image et la lancer.
+
+La méthode init initialise l'objet Acquisition avec plusieurs paramètres : acquisitionPort, storagePort, logPort, confName, confPath. Elle charge également les informations de configuration de la caméra à partir du fichier YAML spécifié dans confPath.
+
+La méthode start_acquisition prend en argument le chemin où seront stockées les images, la fréquence d'acquisition, le temps d'intégration, le nombre d'images à acquérir et la durée d'acquisition. Elle configure la caméra avec la fréquence d'acquisition et le temps d'intégration spécifiés, puis démarre l'acquisition d'images en continu. Elle parcourt ensuite les images acquises et stocke chaque image dans un fichier binaire, en ajoutant un en-tête de 1024 octets qui contient des informations sur la date et l'heure de l'acquisition, le numéro d'image, l'identifiant de trame et les températures de la caméra.
+
+La méthode init_file n'est pas implémentée mais est censée envoyer une commande init_file au module de stockage.
+
+En résumé, ce script permet d'acquérir des images à partir d'une caméra et de les stocker sur un ordinateur distant en ajoutant des informations de métadonnées à chaque image.

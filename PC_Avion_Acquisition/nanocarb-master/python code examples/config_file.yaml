@@ -1,0 +1,16 @@
+---
+module_settings:
+  # warning about LOOP_PERIOD (main loop period for campaigns handling in seconds)
+  # minimum duration in second of one event will be (3 x LOOP_PERIOD) 
+  # minimum idle interval between 2 events will be (2 x LOOP_PERIOD)   
+  LOOP_PERIOD : 300
+  
+  JSON_CMD_TCP_IP: 'localhost'
+  JSON_CMD_TCP_PORT: 9005
+  JSON_DATA_UDP_IP: 'localhost'
+  JSON_DATA_UDP_PORT: 9007
+  
+  FIRMWARE_JSON_CMD_TCP_IP: 'localhost'
+  FIRMWARE_JSON_CMD_TCP_PORT : 9002
+  
+  

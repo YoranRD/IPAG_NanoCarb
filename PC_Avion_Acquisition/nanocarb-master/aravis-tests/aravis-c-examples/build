@@ -1,0 +1,1 @@
+gcc benchmark_1_file.c -I /home/ipag/.local/lib/include/aravis-0.8 -I /usr/include/glib-2.0 -I /usr/lib/x86_64-linux-gnu/glib-2.0/include -L /home/ipag/.local/lib/lib/x86_64-linux-gnu -laravis-0.8 -lgobject-2.0 -lglib-2.0

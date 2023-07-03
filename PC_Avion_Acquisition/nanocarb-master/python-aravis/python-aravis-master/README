@@ -1,0 +1,40 @@
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+Pythonic interface to the auo-generated aravis bindings.
+
+Minimal example code:
+
+import aravis
+ids = aravis.get_device_ids() #List visible cameras
+cam = aravis.Camera(ids[0]) #get the first camera
+try:
+    cam.start_acquisition_continuous(nb_buffers=2)
+    frame = cam.pop_frame()# get next frame from camera
+    print("Saving frame to ", "myframe.npy")
+    np.save(path, frame)
+    cam.stop_acquisition()
+finally:
+    cam.shutdown()
+
+Next read the other examples and the code
+
+Rmq: Aravis needs to be compiled with intropsection support.
+It requires at least libgirepository1.0-dev and gobject-introspection packges on ubuntu
+
+User may need to increase max UDP packet size:
+ifconfig etho0 mtu 9000 up
+or/and
+vi /etc/network/interfaces
+add mtu 9000
+

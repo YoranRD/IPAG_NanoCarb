@@ -1,0 +1,28 @@
+/////////////////// Manip cellule CH4 pré calibrée ////////////////
+
+Objectif :
+	Déterminer la concentration en CH4 de la cellue
+	Tester nos caméras Nanocarb
+	Tester nos codes
+
+
+Manip 1 : CAMERA NUE
+
+	Materiel : 	Caméra nue, Cellule à gaz précalibrée, Laser Accordable, Sphere integrante, 
+			Pwr Meter, Lambdametre, Collimateur IR
+
+
+Protocole :
+	Faire une acquisition de ref sans la cellule à gaz sur un game spectrale avec le LA
+	Faire une autre acquisition sur meme game spectrale avec la cellule à gaz
+
+	Calculer avec Beer Lambert la concentration etc ...
+
+PROBLEME :
+	Nous n'avons pas de cellule à gaz identique de même taille mais vide
+	Donc la référence n'est aps de qualité car le trajet optique n'est pas le même
+	Pas de trajet à travers de surface de verre comme l'acquisition avec la cellule optique
+
+
+
+	

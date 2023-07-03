@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "benchmark_stream+timestamp": "c",
+        "limits": "c"
+    }
+}

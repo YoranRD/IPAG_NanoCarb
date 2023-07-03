@@ -1,0 +1,350 @@
+////////////////////// INTRO + PRESENTATION CAM ///////////////////////////////
+
+
+
+Camérra Nanocarb : interface Giga Ethernet VIsion (GigE)
+intérêts de cette interface : 
+	connecion facile avec cables ethernet
+	transfert rapide de données
+	
+Codes utilisés : C et Python
+
+Logiciel ImageJ très utilisé (peut importer et lire des images brutes au format binaire, tel qu'enregistré sur Nanocarb)
+
+
+Actuel code ONERA boite noire (aucune info dessus)
+Et problemes code ONERA manque de flexibilité, conçu pour implémenter un nb et type de cam fixes et fréquence max 20Hz non moduable entre cameras
+
+Camera fabriquées par NOXANT, optiques et meca par IPAG et ONERA
+
+Cam NanoCarb : spectro imageur spé en C02 et CH4 dans atmosphere
+Mesure spectre du gaz observé => cartographie
+Plus précisement : pour chaque image renvoie imagettes organisées en matrice sur le détecteur
+chaque imagette est une vue pr une longueur d'onde
+Connaissant les raies absorption du gaz observé => concentration
+
+
+//////////////////////////////////////// CAHIER DES CHARGES /////////////////////////////////////////////
+
+	Elements principaux :
+		>>> piloter plusieurs caméras via IHM (interf homme machine) et enregistrer les sqces d'image de maniere robuste en tps réel
+		>>> typiquement 3 cam : 2 NanoCarb 1 Contexte. Mais on doit pouvoir modif le nb et type de cam facilement
+
+	Pilotage des caméras:
+		>>> Param basiques de chaque cam doit être pilotable indépendamment de chaque cam, ex :
+			>>> temps d'exposition (integration time) typiqmt qqs milisecondes
+			>>> fréquence (framerate ou fps) typqmt 20Hz, objectif atteindre 40Hz
+			>>> température des optiques et detecteurs
+
+	Enregistrement des images :
+		>>> chaque image enregistrée doit être datée avec systeme unique et si possible synchro avec serveur de tps de l'avion
+		>>> pas nécessaire que les caméras soient parfaitement synchro entre elles, décalage de qqs images possible
+		>>> On commande l'enregistrement d'une séquence d'image sur une durée donée (ex. 300 secs). 
+		    Ces sqces d'iamges pdt ce tps à la fqce donnée seront enregistrées dans un fichier unique, un par caméra
+		>>> Ces images seront enregistrées dans un fichaier binaire brut. On pref avoir image avec toutes infos, sans compression et faire traitement post mission
+		
+	IHM :
+		>>> avoir un retour des paramètres d'acquisition en tps réel
+		>>> avoir un retour vidéo des caméras (pas forcément fqce fixe et pas forcement même que l'acquisition)
+		>>> Pour les caméras Nanocarb on ne retourne à l'écran qu'une imagette que l'on peut choisir
+		>>> Pour les caméras scientifiques retourner en tps réel un histogramme des valeurs d'intensité des images pr aider l'ajustement du tps d'expo
+		>>> On doit pouvoir :
+			>>> renseigner nom des fichiers à enregistrer
+			>>> ajouter un commentaire qui sera placé en header du fichier brut de la vidéo
+			>>> renseigner une durée pour la séquence d'acquisition à acquérir
+			>>> un bouton pour lancer l'acquisition
+
+
+
+////////////////////////////////////// CHOIX SDK et PROTOCOLES DE LA CAM ////////////////////////////////////////////////////
+
+Choisir le SDK (Sofware Development Kit) sur lequel sera basé le BACKEND. Deux choix GENICAM ou ARAVIS. SDK:
+	>>> SDK = ensemble d'outils fournis destinés aux devs pr faciliter le dvpt d'un logiciel sur une plateforme ou outil donné
+	    il apporte généralement des librairies, docuementation, outils de tests et d'analyse, environnements de dvpmt et protocoles réseau
+
+
+AIDE : documentation de la librairie "NOXANT GigEVision" mais sans avoir accès au code de cette librairie. L'ONERA a utilisé cette librairie pour leur logiciel
+
+Caméra utilise interface GigE Vision : com Ethernet classique.
+Elle utilise deux protocoles principaux le GSVP (GigE Vision Stream Protocol) et le GVCP (GigE Vision COntrol Protocol)
+
+	GVSP :
+		>>> protocole de flux
+		>>> permet à la caméra d'envoyer des données (typiquementt une image) par paquet UDP Standards
+		>>> GiGE Vision Packet contient (dans l'ordre) :
+			>>> Gérer par Network Drivers :
+				- Ethernet Header
+				- IP Header
+				- UDP Header
+			>>> Gérer par GigE Vision Driver :
+				- GigE Vision Header
+				- Image Data
+			>>> Géré par NIC Hardware
+				- Ethernet Trailer
+C'est la compo d'un paquet envoyé par protocole GVSP. Encapsulation assez classique des données en UDP (protocole de com très répandu)
+
+	GVCP :
+		>>> permet contrôle de caméra
+		>>> application tierce peut config et controler appareil GigE Vision en envoyant commande via protocole UDP
+
+
+	/// GENICAM ///
+		>>> A la fois un standard informatique certifié utilisé par toutes les caméras industrielles récentes
+		>>> Et en même tps Une implémentation de référence appelé SDK GENICAM faite sous forme d'API (autrement dit un ensemble de modules) :
+			>>> cad un ensemble de classes, méthodes, gonctions pour offrir un service et l'utilisation d'une appli tierce de ces caméras
+			>>> API fournissent interface de programmation générique pour les cam standard Genicam
+		!!!!!! CES API NE SONT PAS OPEN SOURCE !!!!!!!
+
+	/// ARAVIS ///
+		>>> librairie en C completement Open Source
+		>>> se veut être une alternative à Genicam pr controler la cam et gerer le flux de données
+
+
+//////////// FICHIER XML /////////////////
+	
+Dans els standrs Genicam il est obligatoire d'utilsé un module XML qui repertorie les attributs de la caméra
+C'est via ce ficheir que l'on va pouvoir récuper et modif les attributs de la cam (fqce, tps d'intégration etc ...)
+
+Details fichier XML :
+	>>> Tout d'abord ROOT :
+		>>> regroupe plusieur catégories de controle de la cam
+			- ex. DeviceControl avec les infos générales sur l'instrument (nom modele, identifiant etc...)
+			- ex. ImageControl avec attributs comme Integration Time et FrameRate
+
+Temps d'integration (tps de pose) : tps pdt lequel le capteur va etre exposé à la lumiere pr une image
+	pour nous en microseconde
+	si 20microsec : chaque image prend min 20microsec pr être prise
+	on peut donc pas recup plus de 50 images par sec dans cet exemple (50Hz)
+	=> temps d'intégration prioritaire sur la fréquence qui est conditionnée par celui ci :
+		- si fqce trop élevée p/r au tps d'int => impossible => pas pris en compte par cam
+
+
+
+////////////////// SOLUTION ACTUELLE ///////////////
+
+Actuellement interface via naviagateur Web en local
+Basé sur libraire Noxant GigE Vision de Aravis
+Mais plusieurs pbs :
+	>>> qu'une caméra en meme tps
+	>>> que pour cam Noxant
+	>>> format enregistrement video pas modifiable
+
+
+
+
+/////////////////////////////////////////////////////////////// FORMAT DES FICHIERS //////////////////////////////
+
+Demande du cahier des charges : utilisé même format de fichier que ichier brut video.
+Ici c'est format RAW : contient toutes les données binaires d'une image sans avoir subi traitement
+
+Code IDL de Silvere :
+	- charge image en format de fichier brut
+	- calcul le nombre d'images présentes
+	- récup infos placées en en tête de l'image
+
+
+Fichiers vidéeos Nanocarb emplacement des datas :
+	>>> De 0 à 256 octets : commentaires
+	>>> De 256 à 272 octets (taille 16o): nom caméra
+	>>> 272 à 288o (taille 16o) : version de la cam
+	>>> 288 à 320o (taille 32o): fréquence
+	>>> 320 à 342 (taille 32o) : TI
+
+Puis succession d'images. CHacune à un header tq :
+Début	Taille	Titre
+0	8	tps
+8	2	annee
+10	2	Mois
+12	2	JOur
+14	2	Heure
+16	2	Minute
+18	2	Seconde
+20	2	Miliseconde
+22	4	id_img (id de l'image ex. 8f35)
+26	4	index_image (inde de l'image ex. 01)
+30	8	T_FPA (températuer capteur en K)
+38	8	T_Engine (température de l'optique en °C)
+46	8	T_front (non utilisé)
+54	8	T_stirling (non utilisé)
+
+
+Fichier vidéo n'est qu'empilement d'images avec leurs en têtes
+Chaque image Nanocarb :
+	>>> taille 656 384 octets
+		>>> 1024 octets pour le header
+		>>> 655 360 octets pour image de 640*512 
+			>>> chaque pixel codé en 16bits, soit 2 octets => 640*512*2 = 655 360 octets
+
+Problème de boutisme (ordre de lecture des octets selon prcesseur) => en iversant chaque octet c'est OK
+
+
+
+
+
+
+/////////////////////////////////   ESSAIS D'ACQUISITION : ARAVIS ////////////////////////////
+
+Aravis en C
+C pas orienté objet mais des libraires existent qui introduisent ce systeme de calsses et objets en C
+Notament librairie GObject sur laquelle Aravis est basé
+Trè similaire à C++ (qui est orienté objet)
+
+
+Utilisation d'aravis :
+	1) instancier une caméra (en la détectant automatiquement ou via adresse IP)
+	2) Méthodes pour modif ses attributs (modif fqce : méthode arv_camera_set_framerate() )
+
+
+//// PROBLEMES RENCONTRES :
+
+1) WSL mauvais choix, go Linux
+Choix environnement de progra : WSL (Windows SubSytem for Linux). Permet utiliser noyau Linux avec interface WIndows.
+Problème caméra non détactable ... Certainement pcq WSL émule machine virtuelle Linux via réseau virtuel => pb transmission data ?
+Choix utiliser LINUX = OK Camera détectée !
+
+2) méthode modif attribut Aravis
+methode tq arv_camera_set_framerat"() pour modif framerate ne fonctionne pas
+Aravis incapable de reucp ou modif attributs
+PB : ARAVIS recherche l'attribut "FPS" alors que sur fichier XML "FrameRate"
+SOLUTION : appeler une modif d'attribut en mettant le nom de cet attribut en param :
+	>>> méthode : 		arv_device_set_float_feature_value()     avec en paprametre "FrameRate"
+
+
+
+/////////// Acquisition images :
+
+	>>> Aravis crée un "stream", soit une file de buffers vides (buffer = memoire tampon = zone de mémoire utilisée pour stocker temporairement des données
+	>>> appeler méthode bloquante qui attend que la caméra envoie une image (induit par la fraquence de la cam)
+	>>> quand image dispo Aravis remplit le prochain buffer de la file avec les données de l'image
+	>>> il suffit de faire une boucle pour répéter cette opération autant qu'on le souhaite
+	>>> buffer remplit sera alors une instance qui contiendra données de l'image brut et métadonnées (timestamp, index image etc.)
+	>>> facile de récup ces données et les écrire dans un fichier
+
+Possible avec contraintes de temps réel ?
+
+////////////// le Benchmark
+
+Nécessaire quer le logiciel puisse travailler en tps réel
+Traitements (ajout d'header, modif param cam) + enregistrement des données doivent se faire en parallele avec l'acquisition !!!
+
+ex. objectif atteindre 40Hz => tout processus d'acquisition et enregistrement doit se faire en moins de 25ms (1/40=0.025s=25ms)
+
+=> faire un banchmark de l'acquisition
+benchmark = repere = mesure de performance du systeme
+ici mesurer le tps de chaque partie du code pr voir si ok pr 40Hz ou on doit optimiser plus
+
+
+Protocole benchmark : crée un fichier par iamge sur 1000 images (donc 1000 fichiers) pr les recombiner ensuite.
+Pr chaque image :
+	1) Recupérer image
+	2) Recupérer header
+	3) OUvrir nouveau fichier
+	4) Ecrire header au bon format
+	5) Ecrire image brute
+	6) Fermer fichier
+
+Petit problème de tps par image à partir de 55 FPS => 2eme méthode pour chaque image où on crée qu'un seul fichier pr toutes images (gain de tps sur ouverture et fermeture a chq image)
+
+	1) Get + Write Headers : recup et ecrit header dans fichier
+	2) Write Date : ecrit donnée brut de l'image dans le fichier
+	3) Others : tous les autres processus necessaires mais aucun processus d'ecriture
+
+
+
+////////////////////////////////////////////////////////////  CREATION DE LA SOLUTION ////////////////////////////
+
+Point critique est performance tps réel du systeme d'acquisition
+
+
+/////// Langage utilisé :
+
+Python
+	simple d'utilisation en oriente objet et en ecriture fichier
+
+Mais Aravis ecrite en C => utilisation d'un wrapper
+wrapper = code qui enveloppe d'autres composants logiciels = possible d'envelopper les fonctions Aravis en C pr les appeler dans code Python
+
+wrapper trouvé => tests benchmark à nouveau => resultats similaires, OK !!
+
+
+
+
+//////////// architecture logicielle
+
+Trois points essentiels :
+	1) flexibilite et evolutivité du logiciel : il doit etre implemente de maniere generique peut importe le nb et type de cam
+							doit pouvoir etre mis à jour facilement dans le futur
+
+
+	2) contrainte temps réel : doit être efficace, fluide, rapide pr acquerir fqce au moins 40Hz
+
+	3) Robuste : pr mission ok logiciel doit etre operationnel sous toutes circonstances. Tres important de bien gérer erreurs et alertes
+
+
+Pour robustesse et evolutivité : on doit séparer les taches au maximum => maintenance facile.
+Si chaque fonction a qu'un role et code bien orga si on modif un comportement très facile de modif fonction corresp
+Donc choix de 3 blocs distincts :
+
+	1) Bloc "Acquisition" chargé de la connexion à la caméra et de l'acquisition de l'acquisition de l'image
+	2) bloc "Storage" dedié à l'enregistrement des images sur un fichier
+	3) Bloc "Main" qui controle en tps réel les 2 blocs et est relié à interface de controle
+
+Ils communiquent entre eux via des sockets réseau (permet a plusieurs processus de communiquer sur une meme machine mais aussi via resueau)
+
+
+Bloc ACQUISITION envoie données (typiquement image) sur port réseau 9011. Envoie messages sous forme de commandes JSON
+Bloc STORAGE écoute et attend sur le port 9011 puis récup données quand elles arrivent
+
+Ici messages envoyés sous forme de commande JSON
+	format de données textuelles
+	represente info de maniere structurée comme XML par ex
+	En dautres termes : bloc "client" peut envoyer commande à bloc "serveur" qui reagit diffrement selon commande et arguments en parametres
+
+Le bloc MAIN sera le bloc principal. Pour chaque caméra connectée il instanciera un bloc acquisition qui lui même instanciera son propre bloc storage
+
+
+
+Créera aussi fichier "main.cfg", fichier de config en YAML, qui renseigneront des param statiques et peu modif durant acquisition :
+root_path (chemin enregistrement fichier), config_file_path (chemin d'acces des fichiers config), log_port, acquisition_port_1, storage_port_1 etc ... (ports utilisés)
+
+
+De même on aura les fichiers pour chaque camera <confName>.cfg en YAML qui indiqueront les diffts param de config et les noms des attributs specifiques a la cam pour être sur que aravis fonctionne :
+camera_ip, feature_name_fps, feature_name_it etc...
+	>>>>   la fonction   arv_device_set_float_feature_value()   pourrait servir :
+
+		La fonction arv_device_set_float_feature_value() est utilisée dans le cadre de la programmation d'une caméra utilisant la bibliothèque 
+		Aravis, qui fournit une API pour communiquer avec des caméras industrielles.
+
+		Cette fonction permet de définir la valeur d'un attribut de la caméra qui est de type float, également appelé flottant ou réel en français.
+		 Les attributs de la caméra sont des paramètres qui peuvent être configurés pour contrôler le fonctionnement de la caméra, tels 
+		que la vitesse d'acquisition d'images, la durée d'exposition, la sensibilité ISO, etc.
+
+		Par exemple, pour définir la durée d'exposition de la caméra à 10 millisecondes, vous pouvez appeler 
+		la fonction arv_device_set_float_feature_value() en lui passant l'identifiant de l'attribut correspondant à la durée d'exposition 
+		et la valeur 10.0 en tant que paramètres :
+
+			python
+				arv_device_set_float_feature_value (camera, "ExposureTime", 10.0);
+
+		Cela indiquera à la caméra de fixer la durée d'exposition à 10 millisecondes.
+			>>>>>>>
+
+
+Utiliser LOGGER aussi pour suivre evenements sur ibnterface graphique :	debug, info, warning, error et critical
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
