@@ -1,0 +1,8 @@
+///////////// Code utilisé pour les premiers tests /////////
+
+tests power meter
+tests synchro et usb
+tests 1ere cellule a gaz
+mise en place manip
+test lambdametre
+CH4

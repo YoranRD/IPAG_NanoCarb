@@ -1,0 +1,53 @@
+////////////// MANIP cellule à gaz introduite en CH4 ////////////////
+
+
+Nouvelle cellule après la casse de la précédente
+Déterminer si notre montage est hermétique, si non comment l'améliorer
+
+
+Materiel :
+        Cam nue, Cellule à gaz, Laser Accordable, Sphere integrante, Pwr Meter, Lambdametre, Collimateur IR
+   
+
+
+>>>>>>>>>>>>>> A. Prendre une référence à vide
+
+	1) Faire le montage :
+		- caméra nue
+		- laser accordable relié en Y à lambdametre et collimateur IR.
+		- aligner laser accordable + collimateur IR avec cuve CH4 (reliée à la bombonne CH4) et sphére integrante
+		- sphere integrante : sortie du haut power metter, sortie laterale camera nue (pas en face de l'entrée du laser !!)
+
+	2) Ne pas remplir la cuve de CH4, la laisser vide
+		Petite astuce en général, la celule à gaz mets du temps à se vider de CH4, dans la mesure du possible il vaut mieux effectuer
+		les mesures avec la cellule vide AVANT celles en CH4 pour enchainer ensuite. Le temps d'attente pour que la cellule se vide peut être long
+	   Utiliser le VI principal Acq_SNAKE et le VI Arm_Acq_Acquisition_Loop
+	
+	3) Faire une acquisition autours de la game spectrale souhaitée (autours de raies caract du CH4) avec le L.A
+	   Utiliser le VI principal Acq_SNAKE et le VI Arm_Acq_Acquisition_Loop
+	   Cette acquisition nous servira de référence notamment sur la valeur du Pwr Mtr (Io)
+
+
+
+
+
+
+>>>>>>>>>>>>>> B. Acquisition CH4
+
+
+	1) 	On va remplir la cellule en CH4
+			Bien verifier que la sortie de la cuve est ouverte
+			Ouvrir la bombonne pour faire rentrer le CH4
+			Fermer valve bonbonne et la sortie de la cuve
+			Explications et precautions détaillées sont inscrites sur la bonbonne de CH4
+
+	2) Effectuer les mêmes mesures que précédemment sur la même game spectrale
+
+
+>>>>>>>>>>>>>> C. Analyse des mesures
+
+	1)	Le but est de manipuler les données, voir ce que la presence de CH4 impact sur les données de la caméra etc...
+		Jouer avec les données, les comparer ...
+	
+	2)	Notamment avec la loi de Beer Lambert on peut retrouver la concentration en CH4 en utilisant les valeurs du Pwr Mtr avec la cellue vide (Io) et pleine (I)
+

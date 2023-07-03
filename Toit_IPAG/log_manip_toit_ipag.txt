@@ -1,0 +1,62 @@
+///////////////// Manips Toit IPAG    /////////////////////
+
+
+Plusieurs manip potentiellement intéressantes :
+
+
+
+/////////// 1) HORIZON ///////////////
+
+
+Objectif :
+	Utiliser les deux cam nanocarb CO2 et CH4 en visant à l'horizon
+	On souhaite observer les chaines de montagne dans la fond à l'endroit precis où on en appercois plusieurs à distantes difftes
+	Une chaine en prmeier plan (5km) avec un petit triangle au milieu d'une autre chaine à 10km
+	(le nom des montagnes m'échappe, A REECRIRE ET PRECISER ICI)
+
+Manip :
+	Faire des acquisitions toute la journée du matin au soir avec le déplacement solaire 
+	(typiquement de 10h à 17h pour avoir un parcours solaire ascendant et descandant)
+	
+	Acquérir une image toutes les minutes pendant 7h d'acquisition environ
+	Observer les données récupérées pour déterminer les concentrations en C02 et CH4 en fonction de l'heure, du chemin optique (de la distance à la cam) etc ...
+
+
+Problemes :
+	Il fait très chaud sur le toit, j'ai du proteger les caméras du soleil pour pas qu'elles surchauffent
+	Malgré ça spontanément et plus ou moins au même moment leur température a soudainb grandement augmenté ce qui a conduit à leur arret d'urgence automatique
+	Nous avons des données jusqu'à 15h environ
+	Refaire la manip avec des meilleurs protection ?
+
+
+
+
+
+
+
+
+////////////// 2) ZENITH (pas effectuée, cameras renvoyées à l'ONERA) //////////////////////
+
+
+Protocole:
+	faire des acquisitions periodiques tout au long d'une journée avec les deux caméras NanoCarb CO2 et CH4 pointées vers le ciel, au zenith
+	
+
+
+
+///////////// 3) Spectralon (pas effectuée, cameras renvoyées à l'ONERA) ////////////////
+
+
+Protocole : 
+	faire des acquisitions periodiques tout au long d'une journée avec les deux caméras NanoCarb CO2 et CH4 pointées sur une couche de spectralon
+	Spectralon : meteriaux qui reflechit la lumiere incidente de maniere diffuse (typiquement le materiaux interieur d'une sphere intégrante)
+	Cela permettra d'acquérir les rayons incidents du Soleil (de maniere indirect) tout au long de la journée
+
+
+
+
+
+
+
+
+

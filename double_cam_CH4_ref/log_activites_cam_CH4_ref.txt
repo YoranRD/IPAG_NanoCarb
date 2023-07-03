@@ -1,0 +1,26 @@
+
+////  double_cam_CH4_ref  24/O4 /////////////
+
+
+
+Effectuer des acuqisitions simultanées pour vérifier l'acquisition, la synchro ...
+Le probleme c'est que notre LV ne prend pas en charge 2 cameras, il faut donc le faire avec deux PC
+Ces tests sont surtout là pour voir à quel point on peut acquérir des données avec deux PC, prendre la main en vue de la mission avion
+Pour quoi pas modifier le LV pour effectuer des mesures avec plusieurs caméras en même temps
+
+Materiel :
+       Cam CH4, Cam nue, Cellule à gaz, Laser Accordable, Sphere integrante, Pwr Meter, Lambdametre, Collimateur IR
+   
+Manip :
+	Faire le montage classique L.A / Lambdametre / Collimateur / Cellule à gaz / Sphere integrante / Pwr Mtr
+	Au niveau de la sphère integrante placer en même temps la cameras nue de ref et la cam NanoCarb de ref
+	Faire des acquisitions des deux cameras simultanément avec et sans CH4 dans la cellule
+
+Probleme :
+	L.A déclenche les acquisitions des cams, mais on ne peut le relier qu'à une cam
+	On ne peut donc pas avoir des mesures simultanées sur chaque longueur d'onde
+	Soit on fait des snapshots periodiques avec une cam (typiquement la CH4) pendant que l'autre est target par le L.A
+	Soit on fait des acquisitions avec la source halogene, ce qui serait mieux mais demanderait de faire des snapshots réguliers
+	On va faire les deux methodes
+
+

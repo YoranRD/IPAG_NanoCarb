@@ -1,0 +1,27 @@
+
+
+///// Manip source halogène avec caméra CH4   ///////////////////////////////
+
+
+
+Materiel :
+        Cam CH4, Cellule à gaz, Source Halogène, Sphere integrante, Pwr Meter, Lambdametre, Collimateur IR
+
+
+Manip :  
+	Faire le montage basique mais remplacer le L.A par la source halogene, placée donc devant la cellule à gaz elle même devant la sphère intégrante
+	Prendre un mesure de référence avec la cam CH4 et la cellule vide (sans CH4)
+	Injecter du CH4 dans la cellule
+	Effectuer un snapshot toutes les x min 
+	Typiquement pour une meilleure précision faire une moyenne de beaucoup d'image etant donné que le temps n'est pas un souci pour cette experience
+	J'ai moyenné sur 200 images
+
+	Analyses des datas : observer l'évolution de la quantite de CH4 au cours du temps
+
+
+
+En mettant une sortie filaire à la source hallogène notre signal est très faible 
+La caméra et les éléments du montage ne recoivent presque rien
+Ca ne sert a rien, préférer de ne pas fibrer la source et simplement la placer devant la cellule à gaz
+
+

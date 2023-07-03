@@ -1,0 +1,14 @@
+////////////////   Manip  Zolix /////////////////
+
+
+
+Objectif :
+	Prise en main du monochromateur Zolix, Spectro Ocean Optics USB2000+, logiciel SPectraSuite ....
+	
+	Determiner la résolution spectrale des fentes d'entrées et de sortie du Zolix
+
+Manip :
+	Source halogene dans zolix qui monochromat à longueur d'onde precise, retour sur USB 2000+ de Ocean Optics
+	Effectuer une succession de mesure en modifiant la largeur de la fente de sortie puis de la fente d'entree
+	Caracteriser la resolution spectrale des largeurs de fente
+	Programmation : depuis data recup largeur à mi hauteur de la sortie du Zolix, caract son evolution en fonction largeur fente entrée et sortie

@@ -1,0 +1,13 @@
+//////////////////////// Protocole calib cameras hyperspectrales CO2 et CH4 ////////////////////////
+
+Montage : laser accorable => Y sur lambdametre + collimateur IR => sphere integrante => pwrmetre + camera CH4 / C02
+
+Protocole :
+	1) Faire un cadrillage avec le laser accordable sur une game spectrale précise
+	2) COmparé la réponse spectrale de la caméra à la longueur d'onde donnée par le lambdametre
+
+Game SPectrale
+CO2 : [1606-1612]nm
+CH4 : [1635-1653]nm
+
+
