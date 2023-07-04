@@ -138,6 +138,7 @@ def get_entrance_dict(FWHM_list):
         #on ajoute la valeur de exit_slit et FWHM pour la même valeur de entrance_slit dans le dictionnaire entrance_dict
         entrance_dict[entrance_slit[i]][0].append(exit_slit[i])
         entrance_dict[entrance_slit[i]][1].append(FWHM_list[i])
+    print(entrance_dict)
     return(entrance_dict)
     
 
